@@ -10,19 +10,27 @@ const App = () => {
 
   console.log(initState);
   
-  const switchNameHandler = () => {
+  const switchNameHandler = (newname) => {
     changedState({
       ...initState,
-      persons: [{ name: "Channu BS", age: 25 }, { name: "Dinesh PN", age: 25 }]
+      persons: [{ name: newname, age: 25 }, { name: "Dinesh PN", age: 25 }]
     });
   };
 
   return (
     <div className="App">
       <h1>Hello App Component</h1>
-      <button onClick={switchNameHandler}>Switch Name</button>
-      <Person name={initState.persons[0].name} age={initState.persons[0].age} />
-      <Person name={initState.persons[1].name} age={initState.persons[1].age} />
+      <button onClick={switchNameHandler.bind(this,"hii")}>Switch Name</button>
+      <Person
+        clickRef={()=>switchNameHandler('Joker')}
+        name={initState.persons[0].name}
+        age={initState.persons[0].age}
+      />
+      <Person
+        clickRef={switchNameHandler.bind(this,'Abhi')}
+        name={initState.persons[1].name}
+        age={initState.persons[1].age}
+      />
     </div>
   );
 };
