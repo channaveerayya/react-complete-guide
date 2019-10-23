@@ -1,3 +1,11 @@
 .App {
   text-align: center;
+  background-color: rgb(66, 107, 91);
+}
+button {
+    background-color: rgb(8, 44, 68);
+    border: 1px solid blue;
+    padding: 8px;
+    color: white;
+    cursor: pointer;
 }
