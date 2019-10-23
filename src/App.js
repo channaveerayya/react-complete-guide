@@ -1,48 +1,59 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import "./App.css";
 import Person from "./Person/Person";
+import React, { Component } from "react";
 
-const App = () => {
-  const [initState, changedState] = useState({
-    persons: [{ name: "Channu", age: 25 }, { name: "Dinesh", age: 25 }],
+class App extends Component {
+  state = {
+    persons: [
+      { id: 1, name: "Channu", age: 25 },
+      { id: 2, name: "Dinesh", age: 25 }
+    ],
+    showPerson: false,
     otherState: "other state value"
-  });
-
-  console.log(initState);
-  
-  const switchNameHandler = (newname) => {
-    changedState({
-      ...initState,
-      persons: [{ name: newname, age: 25 }, { name: "Dinesh PN", age: 25 }]
-    });
   };
 
- const inputHandler = event => {
-   changedState({
-     ...initState,
-     persons: [
-       { name: event.target.value, age: 25 },
-       { name: "Dinesh PN", age: 25 }
-     ]
-   });
- };
-  return (
-    <div className="App">
-      <h1>Hello App Component</h1>
-      <button onClick={switchNameHandler.bind(this, "hii")}>Switch Name</button>
-      <Person
-        clickRef={() => switchNameHandler("Joker")}
-        name={initState.persons[0].name}
-        age={initState.persons[0].age}
-        change={inputHandler}
-      />
-      <Person
-        clickRef={switchNameHandler.bind(this, "Abhi")}
-        name={initState.persons[1].name}
-        age={initState.persons[1].age}
-      />
-    </div>
-  );
-};
+  TogglePersons = () => {
+    this.setState({ showPerson: !this.state.showPerson });
+  };
 
+  deletePerson = indexId => {
+    const persons = [...this.state.persons];
+    persons.splice(indexId, 1);
+    this.setState({ persons: persons });
+  };
+
+  inputHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+    person.name = event.target.value;
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+    this.setState({ persons: persons });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hello App Component</h1>
+        <button onClick={this.TogglePersons}>Toggle Persons</button>
+        {this.state.showPerson
+          ? this.state.persons.map((person, index) => (
+              <Person
+                key={index}
+                clickRef={() => this.deletePerson(index)}
+                name={person.name}
+                age={person.age}
+                change={event => this.inputHandler(event, person.id)}
+              />
+            ))
+          : null}
+      </div>
+    );
+  }
+}
 export default App;
